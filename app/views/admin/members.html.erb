@@ -1,0 +1,60 @@
+<% content_for(:sidebar) do %>
+  <%= render :partial => "layouts/sidebar" %>
+<%end%>
+<div id="page-content-wrapper">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div style="float:right;">
+          <% if current_admin.super_admin? %>
+            <%= link_to  "Invite Admin", new_admin_invitation_path, class:'button button1' %>
+          <%end%>
+        </div>
+        <br/>
+        <h4 class="text-left">Admins</h4>
+        <table id="member" class="table table-light table-striped">
+          <thead>
+            <tr>
+              <th scope="col" class="text-center">Id</th>
+              <th scope="col" class="text-center">Email</th>
+              <th scope="col" class="text-center">Created by invite</th>
+              <th scope="col" class="text-center">Account Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @admins.each do |admin| %>
+              <tr>
+                <td class="text-center"><%= admin.id %></td>
+                <td class="text-center"><%= admin.email%></td>
+                <td class="text-center">
+                  <% if admin.created_by_invite? == true%>
+                    <span class="badge badge-success">True</span>
+                  <%else%>
+                    <span class="badge badge-warning">False</span>
+                  <%end%>
+                </td>
+                <td class="text-center">
+                  <% if admin.invitation_accepted? == true%>
+                    <span class="badge badge-success">Approved</span>
+                  <%else%>
+                    <span class="badge badge-warning">Pending</span>
+                  <%end%>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+        <script>
+          $(document).ready(function () {
+            var table = $('#member').DataTable( {
+              responsive: true,
+              lengthChange: false,
+              ordering: false,
+              pageLength : 7,
+            } )
+          });
+        </script>
+      </div>
+    </div>
+  </div>
+</div>
